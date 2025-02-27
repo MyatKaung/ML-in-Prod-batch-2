@@ -4,7 +4,7 @@ import time
 import uvicorn
 import asyncio
 
-
+import os
 from fastapi import status,Response,Query
 from fastapi.responses import StreamingResponse
 
@@ -104,6 +104,9 @@ async def serve_audio_gen(prompt = Query(...),prest : audioModel.VoicePresets = 
     return StreamingResponse(output_audio_array, media_type="audio/wav",headers={"Content-Disposition": "inline; filename=generated_audio.wav"})
 
 
-if __name__ == "__main__":
-    uvicorn.run("main:app", host='0.0.0.0', port=8888, reload=True)
+
+
+port = int(os.getenv("PORT", 8888))  # Default to 8888 if PORT is not set
+uvicorn.run("main:app", host='0.0.0.0', port=port, reload=True)
+
     
