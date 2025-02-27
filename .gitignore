@@ -2,3 +2,5 @@ Datasets/
 .env
 logs/
 06_Containerization/sample_flask/
+06_Containerization/sample_fastapi_with_cloud_run_v1/Pipfile.lock
+06_Containerization/sample_fastapi_with_cloud_run_v1/Pipfile
