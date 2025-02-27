@@ -1,19 +1,23 @@
+# Use the official Python base image
 FROM python:3.10.14
 
+# Set the working directory
 WORKDIR /app
 
-# Copy and install dependencies
-COPY requirements.txt ./
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+# Copy only the requirements.txt first to leverage Docker cache
+COPY requirements.txt .
+
+# Upgrade pip
+RUN pip install --upgrade pip
+
+# Install application dependencies
+RUN pip install -r requirements.txt
 
 # Copy the rest of the application code
 COPY . .
 
-# Set environment variable for Cloud Run
-ENV PORT=8888
+# Expose the application port
+EXPOSE $PORT
 
-# Expose the port explicitly (hardcoded)
-EXPOSE 8888
-
-# Start the FastAPI app using the environment variable PORT
+# Command to run the application
 CMD ["python", "main.py"]
