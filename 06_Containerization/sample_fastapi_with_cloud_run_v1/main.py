@@ -106,7 +106,9 @@ async def serve_audio_gen(prompt = Query(...),prest : audioModel.VoicePresets = 
 
 
 
-port = int(os.getenv("PORT", 8888))  # Default to 8888 if PORT is not set
-uvicorn.run("main:app", host='0.0.0.0', port=port, reload=True)
+if __name__ == '__main__':
+    port = int(os.getenv("PORT", 8888))  # Default to 8888 if PORT is not set
+    uvicorn.run("main:app", host='0.0.0.0', port=port)
+
 
     
