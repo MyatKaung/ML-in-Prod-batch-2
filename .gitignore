@@ -1,3 +1,4 @@
 Datasets/
 .env
 logs/
+06_Containerization/sample_flask/

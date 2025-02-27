@@ -1,0 +1,10 @@
+--extra-index-url https://download.pytorch.org/whl/cu126
+fastapi
+uvicorn
+pydantic
+scipy
+soundfile
+torch
+torchvision
+torchaudio
+transformers
