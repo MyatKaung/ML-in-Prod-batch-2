@@ -1,0 +1,50 @@
+steps:
+
+  # Build the container image
+  - name: gcr.io/cloud-builders/docker
+    args: [
+      "build",
+      "-t", "$_AR_HOSTNAME/$_PROJECT_ID/$_AR_REPOSITORY/$_SERVICE_NAME:$_SERVER",
+      ".",
+      "-f", "Dockerfile",
+      "--cache-from", "$_AR_HOSTNAME/$_PROJECT_ID/$_AR_REPOSITORY/$_SERVICE_NAME:$_SERVER"
+    ]
+    id: Build
+
+  # Push image to Artifact Registry
+  - name: gcr.io/cloud-builders/docker
+    args: [
+      "push",
+      "$_AR_HOSTNAME/$_PROJECT_ID/$_AR_REPOSITORY/$_SERVICE_NAME:$_SERVER"
+    ]
+    id: Push
+
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    entrypoint: gcloud
+    args: [
+      "run", "deploy", "$_SERVICE_NAME",
+      "--platform=managed",
+      "--image", "$_AR_HOSTNAME/$_PROJECT_ID/$_AR_REPOSITORY/$_SERVICE_NAME:$_SERVER",
+      "--region", "$_DEPLOY_REGION",
+      "--port", "$_PORT",
+      "--allow-unauthenticated"
+    ]
+    id: Deploy
+
+images:
+  - "$_AR_HOSTNAME/$_PROJECT_ID/$_AR_REPOSITORY/$_SERVICE_NAME:$_SERVER"
+
+substitutions:
+  _AR_HOSTNAME: 'us-central1-docker.pkg.dev'
+  _PROJECT_ID: 'gen-lang-client-0169280371'
+  _AR_REPOSITORY: 'cloud-run-source-deploy'
+  _SERVICE_NAME: 'ml-in-prod'
+  _SERVICE_ENDPOINT: 'ml-in-prod' # Ensure correct endpoint
+  _DEPLOY_REGION: 'us-central1'
+  _SERVER: 'stg' # You can change this dynamically if needed
+  _PORT: '8888' # Default port for Cloud Run
+
+options:
+  substitutionOption: ALLOW_LOOSE
+  logging: CLOUD_LOGGING_ONLY
