@@ -5,9 +5,8 @@ steps:
     args: [
       "build",
       "-t", "$_AR_HOSTNAME/$_PROJECT_ID/$_AR_REPOSITORY/$_SERVICE_NAME:$_SERVER",
-      ".",
-      "-f", "Dockerfile",
-      "--cache-from", "$_AR_HOSTNAME/$_PROJECT_ID/$_AR_REPOSITORY/$_SERVICE_NAME:$_SERVER"
+      "-f", "06_Containerization/sample_fastapi_with_cloud_run_v1/Dockerfile",  # Correct path to Dockerfile
+      "06_Containerization/sample_fastapi_with_cloud_run_v1"  # Context directory for the build
     ]
     id: Build
 
@@ -40,10 +39,10 @@ substitutions:
   _PROJECT_ID: 'gen-lang-client-0169280371'
   _AR_REPOSITORY: 'cloud-run-source-deploy'
   _SERVICE_NAME: 'ml-in-prod'
-  _SERVICE_ENDPOINT: 'ml-in-prod' # Ensure correct endpoint
+  _SERVICE_ENDPOINT: 'ml-in-prod'
   _DEPLOY_REGION: 'us-central1'
-  _SERVER: 'stg' # You can change this dynamically if needed
-  _PORT: '8888' # Default port for Cloud Run
+  _SERVER: 'latest'
+  _PORT: '8080'
 
 options:
   substitutionOption: ALLOW_LOOSE
